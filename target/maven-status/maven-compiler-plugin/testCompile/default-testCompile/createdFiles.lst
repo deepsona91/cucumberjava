@@ -1,0 +1,7 @@
+PageObjects\HomePage.class
+StepDefinitions\Hooks.class
+StepDefinitions\HomePageStepDefinition.class
+PageObjects\LoginPage.class
+StepDefinitions\TestRunner.class
+PageObjects\BasePage.class
+StepDefinitions\LoginStepDefinition.class

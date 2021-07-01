@@ -1,0 +1,13 @@
+-------------------------------------------------------------------------------
+Test set: StepDefinitions.TestRunner
+-------------------------------------------------------------------------------
+Tests run: 6, Failures: 0, Errors: 3, Skipped: 0, Time elapsed: 0.99 s <<< FAILURE! - in StepDefinitions.TestRunner
+Check name is updated in name textbox #1(Feature to test name is updated when entering #2)  Time elapsed: 0.008 s  <<< ERROR!
+java.lang.ArithmeticException: / by zero
+
+Check name is updated in name textbox #2(Feature to test name is updated when entering #2)  Time elapsed: 0.021 s  <<< ERROR!
+java.lang.ArithmeticException: / by zero
+
+Check name is updated in name textbox #3(Feature to test name is updated when entering #2)  Time elapsed: 0.006 s  <<< ERROR!
+java.lang.ArithmeticException: / by zero
+

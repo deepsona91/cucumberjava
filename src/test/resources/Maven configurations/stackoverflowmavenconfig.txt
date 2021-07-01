@@ -1,0 +1,124 @@
+As you didn't show all configuration, I guess you might miss the plugin configuration in the Runner class. Find below a working project.
+
+assume following structure
+
+pom.xml
+src/test/java/TestRunner.java
+src/test/java/stepdefs/StepDefinitions.java
+src/test/resource/features/demo.feature
+pom.xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.suboptimal</groupId>
+    <artifactId>cuke-test.so</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java8</artifactId>
+            <version>3.0.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit</artifactId>
+            <version>3.0.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.0</version>
+                <configuration>
+                    <testFailureIgnore>true</testFailureIgnore>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>net.masterthought</groupId>
+                <artifactId>maven-cucumber-reporting</artifactId>
+                <version>2.8.0</version>
+                <executions>
+                    <execution>
+                        <id>execution</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <projectName>CucumberWebGui</projectName>
+                            <outputDirectory>${project.build.directory}/cucumber-report-html</outputDirectory>
+                            <cucumberOutput>${project.build.directory}/cucumber.json</cucumberOutput>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+TestRunner.java
+
+import org.junit.runner.RunWith;
+
+import cucumber.api.CucumberOptions;
+import cucumber.api.junit.Cucumber;
+
+@RunWith(Cucumber.class)
+@CucumberOptions(
+        features = {"src/test/resource/features"},
+        glue = {"stepdefs"},
+        plugin = {"json:target/cucumber.json"})
+public class TestRunner {
+}
+StepDefinitions.java
+
+package stepdefs;
+
+import org.junit.Assert;
+
+import cucumber.api.java.en.Given;
+
+public class StepDefinitions {
+    @Given("^a successful step$")
+    public void aSuccessfulStep() throws Throwable {
+        System.out.println("a successful step");
+    }
+
+    @Given("^a not successful step$")
+    public void aNotSuccessfulStep() throws Throwable {
+        System.out.println("a not successful step");
+        Assert.fail();
+    }
+}
+demo.feature
+
+Feature: Test cucumber reporting plugin
+
+  Scenario: Run a non failing scenario
+    Given a successful step
+
+  Scenario: Run a failing scenario
+    Given a not successful step
+running mvn clean test will generate the Cucumber report file
+
+target/cucumber.json
+running mvn verify -DskipTests will generate the cucumber-report-html based on the cucumber.json
+
+target/cucumber-report-html/cucumber-html-reports/src-test-resource-features-demo-feature.html
+target/cucumber-report-html/cucumber-html-reports/...
+running mvn clean verify will do all together
